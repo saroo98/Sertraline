@@ -6,6 +6,8 @@ declare module "theme-ui" {
   interface Theme {
     copyButton?: ThemeUIStyleObject
     dividers?: ThemeUIStyleObject
+    card?: ThemeUIStyleObject
+    cardWithP?: ThemeUIStyleObject
   }
 }
 
@@ -21,6 +23,7 @@ const theme = merge(tailwind, {
     divide: tailwind.colors.gray[4],
     muted: tailwind.colors.gray[2],
     highlightLineBg: `rgba(0, 0, 0, 0.035)`,
+    cardBgShade: 'rgba(255, 255, 255, 0.80)',
     ...lightThemeVars,
     modes: {
       dark: {
@@ -33,6 +36,7 @@ const theme = merge(tailwind, {
         divide: tailwind.colors.gray[8],
         muted: tailwind.colors.gray[8],
         highlightLineBg: `rgba(255, 255, 255, 0.1)`,
+        cardBgShade: 'rgba(0, 0, 0, 0.80)',
         ...darkThemeVars,
       },
     },
@@ -42,6 +46,7 @@ const theme = merge(tailwind, {
   },
   styles: {
     root: {
+      '--theme-ui-colors-background': '#83b4ae',
       color: `text`,
       direction: 'rtl',
       backgroundColor: `background`,
@@ -246,6 +251,15 @@ const theme = merge(tailwind, {
       fontSize: [1, 2, 3],
       color: `text`,
     },
+  },
+  card: {
+    background: 'cardBgShade',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+  },
+  cardWithP: {
+    background: 'cardBgShade',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    padding: '1rem'
   },
 })
 

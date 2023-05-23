@@ -63,7 +63,7 @@ const config: GatsbyConfig = {
         short_name: `سرترالین`,
         description: `دروغ می‌گویم. می‌دانم، می‌دانم که چرا آن کار را نکردم... چون گاهی... نه. نه مهم نیست. باید پیش خودم محفوظ بماند. نیازی ندارم شما‌ها هم بدانید. خودم فکر می‌کنم کافی باشم.`,
         start_url: `/`,
-        background_color: `#fff`,
+        background_color: `#83b4ae`,
         // This will impact how browsers show your PWA/website
         // https://css-tricks.com/meta-theme-color-and-trickery/
         // theme_color: `#6B46C1`,

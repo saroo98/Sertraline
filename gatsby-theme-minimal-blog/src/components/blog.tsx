@@ -27,18 +27,20 @@ const Blog = ({ posts }: MBBlogProps) => {
 
   return (
     <Layout>
+       <div sx={{ mb: [5], variant: `cardWithP` }}>
       <Flex sx={{ alignItems: `center`, justifyContent: `space-between`, flexFlow: `wrap` }}>
         <Heading as="h1" variant="styles.h1" sx={{ marginY: 2 }}>
-          Blog
+          بلاگ
         </Heading>
         <Link
           sx={(t) => ({ ...t.styles?.a, variant: `links.secondary`, marginY: 2 })}
           to={replaceSlashes(`/${basePath}/${tagsPath}`)}
         >
-          View all tags
+          مشاهده تمام برچسب‌ها
         </Link>
       </Flex>
       <Listing posts={posts} sx={{ mt: [4, 5] }} />
+      </div>
     </Layout>
   )
 }

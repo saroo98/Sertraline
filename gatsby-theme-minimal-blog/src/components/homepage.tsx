@@ -35,16 +35,23 @@ const Homepage = ({ posts }: MBHomepageProps) => {
   return (
     <Layout>
       <h1 sx={visuallyHidden}>{siteTitle}</h1>
-      <section sx={{ mb: [5, 6, 7], p: { fontSize: [1, 2, 3], mt: 2 }, variant: `section_hero` }}>
-        <Hero />
+      <section sx={{ mb: [5], p: { fontSize: [1, 2, 3], mt: 2 }, variant: `section_hero` }}>
+        <div sx={{ variant: `cardWithP` }}>
+          <Hero />
+        </div>
       </section>
-      <Title text="آخرین نوشته‌ها">
-        <Link to={replaceSlashes(`/${basePath}/${blogPath}`)}>تمامی نوشته‌ها</Link>
-      </Title>
-      <Listing posts={posts} showTags={false} />
-      <List>
-        <Bottom />
-      </List>
+      <div sx={{ mb: [5], variant: `cardWithP` }}>
+        <Title text="آخرین نوشته‌ها">
+          <Link to={replaceSlashes(`/${basePath}/${blogPath}`)}>تمامی نوشته‌ها</Link>
+        </Title>
+        <Listing posts={posts} showTags={false} />
+      </div>
+      <div sx={{ variant: `cardWithP` }}>
+        <List>
+          <Bottom />
+        </List>
+      </div>
+
     </Layout>
   )
 }

@@ -25,6 +25,9 @@ const Layout = ({ children, className = `` }: LayoutProps) => (
           backgroundColor: get(t, `colors.text`),
           color: get(t, `colors.background`),
         },
+        'body': {
+          backgroundImage: 'url(./almond_blossom.jpg)'
+        }
       })}
     />
     <SkipNavLink>Skip to content</SkipNavLink>

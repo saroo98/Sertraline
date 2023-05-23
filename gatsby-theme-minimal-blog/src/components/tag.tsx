@@ -32,18 +32,20 @@ const Tag = ({ posts, pageContext }: MBTagProps) => {
 
   return (
     <Layout>
-      <Flex sx={{ alignItems: `center`, justifyContent: `space-between`, flexFlow: `wrap` }}>
-        <Heading as="h1" variant="styles.h1" sx={{ marginY: 2 }}>
-          {pageContext.name}
-        </Heading>
-        <Link
-          sx={(t) => ({ ...t.styles?.a, variant: `links.secondary`, marginY: 2 })}
-          to={replaceSlashes(`/${basePath}/${tagsPath}`)}
-        >
-          View all tags
-        </Link>
-      </Flex>
-      <Listing posts={posts} sx={{ mt: [4, 5] }} />
+      <div sx={{ variant: `cardWithP` }}>
+        <Flex sx={{ alignItems: `center`, justifyContent: `space-between`, flexFlow: `wrap` }}>
+          <Heading as="h1" variant="styles.h1" sx={{ marginY: 2 }}>
+            {pageContext.name}
+          </Heading>
+          <Link
+            sx={(t) => ({ ...t.styles?.a, variant: `links.secondary`, marginY: 2 })}
+            to={replaceSlashes(`/${basePath}/${tagsPath}`)}
+          >
+           مشاهده تمام برچسب‌ها
+          </Link>
+        </Flex>
+        <Listing posts={posts} sx={{ mt: [4, 5] }} />
+      </div>
     </Layout>
   )
 }

@@ -35,6 +35,7 @@ const shadow = px.map((v) => `rgba(0, 0, 0, 0.1) 0px ${v} ${v} 0px`)
 
 const Post: React.FC<React.PropsWithChildren<PageProps<MBPostProps>>> = ({ data: { post }, children }) => (
   <Layout>
+     <div sx={{ mb: [5], variant: `cardWithP` }}>
     <Heading as="h1" variant="styles.h1">
       {post.title}
     </Heading>
@@ -66,6 +67,7 @@ const Post: React.FC<React.PropsWithChildren<PageProps<MBPostProps>>> = ({ data:
       {children}
     </section>
     <PostFooter post={post} />
+    </div>
   </Layout>
 )
 
