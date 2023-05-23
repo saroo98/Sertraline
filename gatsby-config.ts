@@ -1,14 +1,14 @@
-import type { GatsbyConfig, PluginRef } from "gatsby"
-import "dotenv/config"
+import type { GatsbyConfig, PluginRef } from 'gatsby';
+import 'dotenv/config';
 
-const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE
+const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE;
 
 const config: GatsbyConfig = {
   siteMetadata: {
     // You can overwrite values here that are used for the SEO component
     // You can also add new values here to query them like usual
     // See all options: https://github.com/LekoArts/gatsby-themes/blob/main/themes/gatsby-theme-minimal-blog/gatsby-config.mjs
-    siteTitle: `Minimal Blog`,
+    siteTitle: `سرترالین`,
     siteTitleAlt: `Minimal Blog - Gatsby Theme`,
     siteHeadline: `Minimal Blog - Gatsby Theme from @lekoarts`,
     siteUrl: `https://minimal-blog.lekoarts.de`,
@@ -51,6 +51,15 @@ const config: GatsbyConfig = {
         output: `/`,
       },
     },
+    {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: `4yp4v3zf608p`,
+        // Learn about environment variables: https://gatsby.dev/env-vars
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+      },
+    },
+    `gatsby-plugin-image`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -97,11 +106,14 @@ const config: GatsbyConfig = {
             serialize: ({
               query: { site, allPost },
             }: {
-              query: { allPost: IAllPost; site: { siteMetadata: ISiteMetadata } }
+              query: {
+                allPost: IAllPost;
+                site: { siteMetadata: ISiteMetadata };
+              };
             }) =>
               allPost.nodes.map((post) => {
-                const url = site.siteMetadata.siteUrl + post.slug
-                const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`
+                const url = site.siteMetadata.siteUrl + post.slug;
+                const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`;
 
                 return {
                   title: post.title,
@@ -109,8 +121,8 @@ const config: GatsbyConfig = {
                   excerpt: post.excerpt,
                   url,
                   guid: url,
-                  custom_elements: [{ "content:encoded": content }],
-                }
+                  custom_elements: [{ 'content:encoded': content }],
+                };
               }),
             query: `{
   allPost(sort: {date: DESC}) {
@@ -138,41 +150,41 @@ const config: GatsbyConfig = {
       },
     },
   ].filter(Boolean) as Array<PluginRef>,
-}
+};
 
-export default config
+export default config;
 
 interface IPostTag {
-  name: string
-  slug: string
+  name: string;
+  slug: string;
 }
 
 interface IPost {
-  slug: string
-  title: string
-  defer: boolean
-  date: string
-  excerpt: string
-  contentFilePath: string
-  html: string
-  timeToRead: number
-  wordCount: number
-  tags: Array<IPostTag>
-  banner: any
-  description: string
-  canonicalUrl: string
+  slug: string;
+  title: string;
+  defer: boolean;
+  date: string;
+  excerpt: string;
+  contentFilePath: string;
+  html: string;
+  timeToRead: number;
+  wordCount: number;
+  tags: Array<IPostTag>;
+  banner: any;
+  description: string;
+  canonicalUrl: string;
 }
 
 interface IAllPost {
-  nodes: Array<IPost>
+  nodes: Array<IPost>;
 }
 
 interface ISiteMetadata {
-  siteTitle: string
-  siteTitleAlt: string
-  siteHeadline: string
-  siteUrl: string
-  siteDescription: string
-  siteImage: string
-  author: string
+  siteTitle: string;
+  siteTitleAlt: string;
+  siteHeadline: string;
+  siteUrl: string;
+  siteDescription: string;
+  siteImage: string;
+  author: string;
 }
