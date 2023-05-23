@@ -20,6 +20,14 @@ const config = (options) => ({
       options,
     },
     {
+      resolve: 'gatsby-plugin-web-font-loader',
+      options: {
+        google: {
+          families: ['Vazirmatn', 'Markazi Text']
+        }
+      }
+    },
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `texts`,
