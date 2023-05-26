@@ -23,7 +23,7 @@ const config = (options) => ({
       resolve: 'gatsby-plugin-web-font-loader',
       options: {
         google: {
-          families: ['Vazirmatn', 'Markazi Text']
+          families: ['Vazirmatn', 'Lateef', 'Mirza']
         }
       }
     },

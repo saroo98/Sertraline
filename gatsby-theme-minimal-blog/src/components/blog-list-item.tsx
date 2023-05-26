@@ -20,21 +20,28 @@ type BlogListItemProps = {
   showTags?: boolean
 }
 
-const BlogListItem = ({ post, showTags = true }: BlogListItemProps) => (
-  <Box mb={4}>
-    <Link to={post.slug} sx={(t) => ({ ...t.styles?.a, fontSize: [1, 2, 3], color: `text` })}>
-      {post.title}
-    </Link>
-    <p sx={{ color: `secondary`, mt: 1, a: { color: `secondary` }, fontSize: [1, 1, 2] }}>
-      <time>{post.date}</time>
-      {post.tags && showTags && (
-        <React.Fragment>
-          {` — `}
-          <ItemTags tags={post.tags} />
-        </React.Fragment>
-      )}
-    </p>
-  </Box>
-)
+const BlogListItem = ({ post, showTags = true }: BlogListItemProps) => {
+  const [day, month, year] = post.date.split('.');
+  const formattedDate = new Intl.DateTimeFormat('fa', {
+    dateStyle: 'long',
+  }).format(new Date(year + '-' + month + '-' + day));
+
+  return (
+    <Box mb={4}>
+      <Link to={post.slug} sx={(t) => ({ ...t.styles?.a, fontSize: [1, 2, 3], color: `text` })}>
+        {post.title}
+      </Link>
+      <p sx={{ color: `secondary`, mt: 1, a: { color: `secondary` }, fontSize: [1, 1, 2] }}>
+        <time>{formattedDate}</time>
+        {post.tags && showTags && (
+          <React.Fragment>
+            {` — `}
+            <ItemTags tags={post.tags} />
+          </React.Fragment>
+        )}
+      </p>
+    </Box>
+  )
+}
 
 export default BlogListItem

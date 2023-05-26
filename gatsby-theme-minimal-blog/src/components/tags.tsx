@@ -15,27 +15,38 @@ export type MBTagsProps = {
   }[]
 }
 
+function toFarsiNumber(n) {
+  const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
+  return n
+    .toString()
+    .replace(/\d/g, x => farsiDigits[x]);
+}
+
+
 const Tags = ({ list }: MBTagsProps) => {
   const { tagsPath, basePath } = useMinimalBlogConfig()
 
   return (
     <Layout>
-      <Heading as="h1" variant="styles.h1">
-        Tags
-      </Heading>
-      <Box mt={[4, 5]}>
-        {list.map((listItem) => (
-          <Flex key={listItem.fieldValue} mb={[1, 1, 2]} sx={{ alignItems: `center` }}>
-            <Link
-              sx={(t) => ({ ...t.styles?.a, variant: `links.listItem`, mr: 2 })}
-              to={replaceSlashes(`/${basePath}/${tagsPath}/${kebabCase(listItem.fieldValue)}`)}
-            >
-              {listItem.fieldValue} <span sx={{ color: `secondary` }}>({listItem.totalCount})</span>
-            </Link>
-          </Flex>
-        ))}
-      </Box>
-    </Layout>
+      <div sx={{ mb: [5], variant: `cardWithP` }}>
+        <Heading as="h1" variant="styles.h1">
+          برچسب‌ها
+        </Heading>
+        <Box mt={[4, 5]}>
+          {list.map((listItem) => (
+            <Flex key={listItem.fieldValue} mb={[1, 1, 2]} sx={{ alignItems: `center` }}>
+              <Link
+                sx={(t) => ({ ...t.styles?.a, variant: `links.listItem`, mr: 2 })}
+                to={replaceSlashes(`/${basePath}/${tagsPath}/${kebabCase(listItem.fieldValue)}`)}
+              >
+                {listItem.fieldValue} <span sx={{ color: `secondary` }}>({toFarsiNumber(listItem.totalCount)})</span>
+              </Link>
+            </Flex>
+          ))}
+        </Box>
+      </div>
+    </Layout >
   )
 }
 

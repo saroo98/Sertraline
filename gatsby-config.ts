@@ -29,8 +29,8 @@ const config: GatsbyConfig = {
             slug: `/blog`,
           },
           {
-            title: `درباره`,
-            slug: `/about`,
+            title: ` برچسب‌ها`,
+            slug: `/tags`,
           },
         ],
         externalLinks: [
@@ -110,10 +110,12 @@ const config: GatsbyConfig = {
               allPost.nodes.map((post) => {
                 const url = site.siteMetadata.siteUrl + post.slug;
                 const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`;
-
+                const theDate = new Date(post.date);
                 return {
                   title: post.title,
-                  date: post.date,
+                  date: new Intl.DateTimeFormat('fa', {
+                    dateStyle: 'long',
+                  }).format(theDate),
                   excerpt: post.excerpt,
                   url,
                   guid: url,

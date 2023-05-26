@@ -40,16 +40,18 @@ const Homepage = ({ posts }: MBHomepageProps) => {
           <Hero />
         </div>
       </section>
-      <div sx={{ mb: [5], variant: `cardWithP` }}>
-        <Title text="آخرین نوشته‌ها">
-          <Link to={replaceSlashes(`/${basePath}/${blogPath}`)}>تمامی نوشته‌ها</Link>
-        </Title>
-        <Listing posts={posts} showTags={false} />
-      </div>
-      <div sx={{ variant: `cardWithP` }}>
-        <List>
-          <Bottom />
-        </List>
+      <div sx={{ display: 'flex', flexDirection: ['column', 'column', 'row'] }}>
+        <div sx={{ mb: [5, 0, 0], ml: [null, null, 5], width: '100%', variant: `cardWithP` }}>
+          <Title text="آخرین نوشته‌ها">
+            <Link to={replaceSlashes(`/${basePath}/${blogPath}`)}>تمامی نوشته‌ها</Link>
+          </Title>
+          <Listing posts={posts} showTags={false} />
+        </div>
+        <div sx={{ width: '100%', variant: `cardWithP` }}>
+          <List>
+            <Bottom />
+          </List>
+        </div>
       </div>
 
     </Layout>

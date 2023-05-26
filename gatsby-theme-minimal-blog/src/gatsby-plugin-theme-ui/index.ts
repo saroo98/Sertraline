@@ -42,7 +42,8 @@ const theme = merge(tailwind, {
     },
   },
   fonts: {
-    body: `Vazirmatn, "Markazi Text", -apple-system, BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"`,
+    body: `Vazirmatn, -apple-system, BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"`,
+    heading: `Mirza`
   },
   styles: {
     root: {

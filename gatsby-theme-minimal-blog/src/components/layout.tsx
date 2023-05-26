@@ -26,7 +26,8 @@ const Layout = ({ children, className = `` }: LayoutProps) => (
           color: get(t, `colors.background`),
         },
         'body': {
-          backgroundImage: 'url(./almond_blossom.jpg)'
+          backgroundImage: 'url(./almond_blossom.jpg)',
+          minHeight: '100vh'
         }
       })}
     />
