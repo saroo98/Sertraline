@@ -1,7 +1,5 @@
 <p align="center">
-  <a href="https://minimal-blog.lekoarts.de">
-    <img alt="LekoArts" src="https://img.lekoarts.de/gatsby/gatsby-site-illustration.png" />
-  </a>
+[![Netlify Status](https://api.netlify.com/api/v1/badges/83182786-c11e-4e28-b81d-9bab206ba544/deploy-status)](https://app.netlify.com/sites/tranquil-melomakarona-5b7804/deploys)
 </p>
 <h1 align="center">
   Gatsby Starter: Minimal Blog
