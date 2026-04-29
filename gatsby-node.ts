@@ -83,6 +83,23 @@ export const createSchemaCustomization: GatsbyNode['createSchemaCustomization'] 
 export const createPages: GatsbyNode['createPages'] = async ({ actions, graphql, reporter }) => {
   if (!hasSanityConfig) {
     reporter.info('Sanity project is not configured; Gatsby is using the existing MDX content only.');
+    const mdxResult = await graphql<{ allPost: { nodes: { slug: string }[] } }>(`
+      { allPost { nodes { slug } } }
+    `);
+    if (mdxResult.errors || !mdxResult.data) return;
+    const homepageTemplate = path.resolve(
+      './gatsby-theme-minimal-blog/src/@lekoarts/gatsby-theme-minimal-blog-core/templates/homepage-query.tsx'
+    );
+    const numBlogPages = Math.ceil(mdxResult.data.allPost.nodes.length / POSTS_PER_PAGE);
+    for (let currentPage = 2; currentPage <= numBlogPages; currentPage += 1) {
+      actions.createPage({
+        path: `/page/${currentPage}`,
+        component: homepageTemplate,
+        context: { currentPage, postsPerPage: POSTS_PER_PAGE, formatString: 'YYYY-MM-DD' },
+      });
+      actions.createRedirect({ fromPath: `/blog/page/${currentPage}`, toPath: `/page/${currentPage}`, isPermanent: true });
+      actions.createRedirect({ fromPath: `/blog/page/${currentPage}/`, toPath: `/page/${currentPage}`, isPermanent: true });
+    }
     return;
   }
 
