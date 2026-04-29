@@ -52,16 +52,20 @@ const buttonBaseStyles = {
   justifyContent: `center`,
   transition: `opacity 0.3s ease`,
   border: `none`,
-  outline: `none`,
   background: `none`,
   cursor: `pointer`,
   padding: 0,
   appearance: `none`,
   "&:hover, &:focus": { opacity: 1 },
+  "&:focus-visible": {
+    outline: `2px solid`,
+    outlineColor: `primary`,
+    outlineOffset: `4px`,
+  },
 } as const
 
 const FallbackIcon = () => (
-  <button type="button" sx={buttonBaseStyles}>
+  <button type="button" aria-label="تغییر حالت رنگ" title="تغییر حالت رنگ" sx={buttonBaseStyles}>
     <div
       sx={{
         ...iconBaseStyles,
@@ -116,8 +120,8 @@ const ColorModeToggle = () => {
           document.documentElement.classList.value = `theme-ui-${next}`
         }}
         type="button"
-        aria-label={isDark ? `Activate Light Mode` : `Activate Dark Mode`}
-        title={isDark ? `Activate Light Mode` : `Activate Dark Mode`}
+        aria-label={isDark ? `فعال کردن حالت روشن` : `فعال کردن حالت تیره`}
+        title={isDark ? `فعال کردن حالت روشن` : `فعال کردن حالت تیره`}
         sx={buttonBaseStyles}
       >
         <div

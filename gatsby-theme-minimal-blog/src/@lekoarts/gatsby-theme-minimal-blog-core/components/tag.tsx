@@ -1,9 +1,11 @@
 import * as React from "react"
 import Tag, { Head } from "../../../components/tag"
+import { mergePosts } from "../../../utils/sanity-posts"
 
 type Props = {
   data: {
     allPost: any
+    allSanityPost?: any
     [key: string]: any
   }
   pageContext: {
@@ -17,10 +19,10 @@ type Props = {
 
 export default function MinimalBlogCoreTag({ ...props }: Props) {
   const {
-    data: { allPost },
+    data: { allPost, allSanityPost },
   } = props
 
-  return <Tag posts={allPost.nodes} {...props} />
+  return <Tag posts={mergePosts(allPost.nodes, allSanityPost?.nodes)} {...props} />
 }
 
 export { Head }
