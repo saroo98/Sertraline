@@ -27,10 +27,6 @@ const config: GatsbyConfig = {
         postsPath: hasSanityConfig ? `content/legacy-posts-disabled` : `content/posts`,
         navigation: [
           {
-            title: `وبلاگ`,
-            slug: `/blog`,
-          },
-          {
             title: `برچسب‌ها`,
             slug: `/tags`,
           },

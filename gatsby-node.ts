@@ -148,6 +148,9 @@ export const createPages: GatsbyNode['createPages'] = async ({ actions, graphql,
 
   const sanityPostTemplate = path.resolve('./gatsby-theme-minimal-blog/src/templates/sanity-post-query.tsx');
   const sanityPageTemplate = path.resolve('./gatsby-theme-minimal-blog/src/templates/sanity-page-query.tsx');
+  const homepageTemplate = path.resolve(
+    './gatsby-theme-minimal-blog/src/@lekoarts/gatsby-theme-minimal-blog-core/templates/homepage-query.tsx'
+  );
   const blogTemplate = path.resolve(
     './gatsby-theme-minimal-blog/src/@lekoarts/gatsby-theme-minimal-blog-core/templates/blog-query.tsx'
   );
@@ -159,6 +162,17 @@ export const createPages: GatsbyNode['createPages'] = async ({ actions, graphql,
   const existingTagSlugs = new Set(
     result.data.allPost.nodes.flatMap((post) => post.tags?.map((tag) => tag.slug) || [])
   );
+
+  actions.createRedirect({
+    fromPath: '/blog',
+    toPath: '/',
+    isPermanent: true,
+  });
+  actions.createRedirect({
+    fromPath: '/blog/',
+    toPath: '/',
+    isPermanent: true,
+  });
 
   for (const post of result.data.allSanityPost.nodes) {
     const slug = normalizePath(post.slug?.current);
@@ -230,13 +244,23 @@ export const createPages: GatsbyNode['createPages'] = async ({ actions, graphql,
   const numBlogPages = Math.ceil(visibleBlogSlugs.size / POSTS_PER_PAGE);
   for (let currentPage = 2; currentPage <= numBlogPages; currentPage += 1) {
     actions.createPage({
-      path: `/blog/page/${currentPage}`,
-      component: blogTemplate,
+      path: `/page/${currentPage}`,
+      component: homepageTemplate,
       context: {
         currentPage,
         postsPerPage: POSTS_PER_PAGE,
         formatString: 'YYYY-MM-DD',
       },
+    });
+    actions.createRedirect({
+      fromPath: `/blog/page/${currentPage}`,
+      toPath: `/page/${currentPage}`,
+      isPermanent: true,
+    });
+    actions.createRedirect({
+      fromPath: `/blog/page/${currentPage}/`,
+      toPath: `/page/${currentPage}`,
+      isPermanent: true,
     });
   }
 };
