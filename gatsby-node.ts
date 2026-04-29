@@ -264,3 +264,9 @@ export const createPages: GatsbyNode['createPages'] = async ({ actions, graphql,
     });
   }
 };
+
+export const onCreatePage: GatsbyNode['onCreatePage'] = ({ page, actions }) => {
+  if (page.path === '/blog/' || page.path.startsWith('/blog/page/')) {
+    actions.deletePage(page);
+  }
+};
