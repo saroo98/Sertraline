@@ -25,13 +25,17 @@ const Layout = ({ children, className = `` }: LayoutProps) => (
           backgroundColor: get(t, `colors.text`),
           color: get(t, `colors.background`),
         },
-        'body': {
-          backgroundImage: 'url(./almond_blossom.jpg)',
-          minHeight: '100vh'
+        body: {
+          backgroundAttachment: `fixed`,
+          backgroundImage: `url(/almond_blossom.jpg)`,
+          backgroundPosition: `center`,
+          backgroundRepeat: `no-repeat`,
+          backgroundSize: `cover`,
+          minHeight: `100vh`,
         }
       })}
     />
-    <SkipNavLink>Skip to content</SkipNavLink>
+    <SkipNavLink>رفتن به محتوای اصلی</SkipNavLink>
     <Container>
       <Header />
       <Box id="skip-nav" as="main" variant="layout.main" sx={{ ...CodeStyles }} className={className}>

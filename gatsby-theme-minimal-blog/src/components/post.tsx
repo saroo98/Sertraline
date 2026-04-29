@@ -6,6 +6,7 @@ import Layout from "./layout"
 import ItemTags from "./item-tags"
 import Seo from "./seo"
 import PostFooter from "./post-footer"
+import { formatPersianDate, toFarsiNumber } from "../utils/format"
 
 export type MBPostProps = {
   post: {
@@ -30,28 +31,13 @@ export type MBPostProps = {
   }
 }
 
-function toFarsiNumber(n) {
-  const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-
-  return n
-    .toString()
-    .replace(/\d/g, x => farsiDigits[x]);
-}
-
 const px = [`16px`, `8px`, `4px`]
 const shadow = px.map((v) => `rgba(0, 0, 0, 0.1) 0px ${v} ${v} 0px`)
 
 const Post: React.FC<React.PropsWithChildren<PageProps<MBPostProps>>> = ({ data: { post }, children }) => {
-  const [day, month, year] = post.date.split('.');
-  const date = new Date(year + '-' + month + '-' + day);
-  const formattedDate = new Intl.DateTimeFormat('fa', {
-    dateStyle: 'long',
-  }).format(date);
-  const formattedWeekday = new Intl.DateTimeFormat('fa', {
-    weekday: 'long'
-  }).format(date);
+  const formattedDate = formatPersianDate(post.date)
+  const formattedWeekday = formatPersianDate(post.date, { weekday: `long`, timeZone: `UTC` })
 
-  console.log(post.banner);
   return (
     <Layout>
       <div sx={{ mb: [5], variant: `cardWithP` }}>
@@ -62,7 +48,7 @@ const Post: React.FC<React.PropsWithChildren<PageProps<MBPostProps>>> = ({ data:
           {post.title}
         </Heading>
         <p sx={{ color: `secondary`, mt: 3, a: { color: `secondary` }, fontSize: [1, 1, 2] }}>
-          <time> {formattedWeekday}، {formattedDate}</time>
+          <time dateTime={post.date}> {formattedWeekday}، {formattedDate}</time>
           {post.tags && (
             <React.Fragment>
               {` — `}
@@ -103,5 +89,6 @@ export const Head: HeadFC<MBPostProps> = ({ data: { post } }) => (
     image={post.banner ? post.banner?.childImageSharp?.resize?.src : undefined}
     pathname={post.slug}
     canonicalUrl={post.canonicalUrl}
+    type="article"
   />
 )

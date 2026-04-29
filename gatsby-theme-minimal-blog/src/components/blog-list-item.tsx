@@ -3,6 +3,7 @@ import * as React from "react"
 import { jsx, Box } from "theme-ui"
 import { Link } from "gatsby"
 import ItemTags from "./item-tags"
+import { formatPersianDate } from "../utils/format"
 
 type BlogListItemProps = {
   post: {
@@ -21,10 +22,7 @@ type BlogListItemProps = {
 }
 
 const BlogListItem = ({ post, showTags = true }: BlogListItemProps) => {
-  const [day, month, year] = post.date.split('.');
-  const formattedDate = new Intl.DateTimeFormat('fa', {
-    dateStyle: 'long',
-  }).format(new Date(year + '-' + month + '-' + day));
+  const formattedDate = formatPersianDate(post.date)
 
   return (
     <Box mb={4}>
@@ -32,7 +30,7 @@ const BlogListItem = ({ post, showTags = true }: BlogListItemProps) => {
         {post.title}
       </Link>
       <p sx={{ color: `secondary`, mt: 1, a: { color: `secondary` }, fontSize: [1, 1, 2] }}>
-        <time>{formattedDate}</time>
+        <time dateTime={post.date}>{formattedDate}</time>
         {post.tags && showTags && (
           <React.Fragment>
             {` — `}

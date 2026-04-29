@@ -5,13 +5,14 @@ import useMinimalBlogConfig from "../hooks/use-minimal-blog-config"
 
 const HeaderExternalLinks = () => {
   const { externalLinks } = useMinimalBlogConfig()
+  const validExternalLinks = externalLinks?.filter((link) => link.url && link.url !== `#`)
 
   return (
     <React.Fragment>
-      {externalLinks && externalLinks.length > 0 && (
+      {validExternalLinks && validExternalLinks.length > 0 && (
         <div sx={{ "a:not(:first-of-type)": { ml: 3 }, fontSize: [1, `18px`] }}>
-          {externalLinks.map((link) => (
-            <TLink key={link.url} href={link.url}>
+          {validExternalLinks.map((link) => (
+            <TLink key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">
               {link.name}
             </TLink>
           ))}

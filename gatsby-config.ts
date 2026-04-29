@@ -2,20 +2,20 @@ import type { GatsbyConfig, PluginRef } from 'gatsby';
 import 'dotenv/config';
 
 const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE;
+const sanityProjectId = process.env.SANITY_PROJECT_ID || process.env.SANITY_STUDIO_PROJECT_ID;
+const sanityDataset = process.env.SANITY_DATASET || process.env.SANITY_STUDIO_DATASET || 'production';
+const hasSanityConfig = Boolean(sanityProjectId);
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    // You can overwrite values here that are used for the SEO component
-    // You can also add new values here to query them like usual
-    // See all options: https://github.com/LekoArts/gatsby-themes/blob/main/themes/gatsby-theme-minimal-blog/gatsby-config.mjs
     siteTitle: `سرترالین`,
-    siteTitleAlt: `سرترالین - خوشبختی زود و مفت`,
-    siteHeadline: `سرترالین - خوشبختی زود و مفت`,
+    siteTitleAlt: `سرترالین | وبلاگ شخصی سارو`,
+    siteHeadline: `سرترالین | وبلاگ شخصی سارو`,
     siteUrl: `https://sertraline.ir`,
-    siteDescription: `دروغ می‌گویم. می‌دانم، می‌دانم که چرا آن کار را نکردم... چون گاهی... نه. نه مهم نیست. باید پیش خودم محفوظ بماند. نیازی ندارم شما‌ها هم بدانید. خودم فکر می‌کنم کافی باشم.`,
+    siteDescription: `یادداشت‌ها و نوشته‌های شخصی سارو؛ نه راهنمای پزشکی، نه توصیه مصرف دارو، و نه جایگزین کمک حرفه‌ای.`,
     siteImage: `/banner.jpg`,
-    siteLanguage: `fa`,
-    // author: `@lekoarts_de`,
+    siteLanguage: `fa-IR`,
+    author: `Saro`,
   },
   trailingSlash: `never`,
   plugins: [
@@ -23,22 +23,33 @@ const config: GatsbyConfig = {
       resolve: `@lekoarts/gatsby-theme-minimal-blog`,
       // See the theme's README for all available options
       options: {
+        formatString: `YYYY-MM-DD`,
+        postsPath: hasSanityConfig ? `content/legacy-posts-disabled` : `content/posts`,
         navigation: [
           {
             title: `وبلاگ`,
             slug: `/blog`,
           },
           {
-            title: ` برچسب‌ها`,
+            title: `برچسب‌ها`,
             slug: `/tags`,
           },
-        ],
-        externalLinks: [
           {
-            name: `توییتر`,
-            url: `#`,
+            title: `درباره`,
+            slug: `/about`,
           },
         ],
+        externalLinks: [],
+      },
+    },
+    hasSanityConfig && {
+      resolve: `gatsby-source-sanity`,
+      options: {
+        projectId: sanityProjectId,
+        dataset: sanityDataset,
+        token: process.env.SANITY_API_TOKEN,
+        overlayDrafts: Boolean(process.env.SANITY_API_TOKEN && process.env.GATSBY_SANITY_OVERLAY_DRAFTS),
+        watchMode: process.env.NODE_ENV === `development`,
       },
     },
     {
@@ -47,26 +58,16 @@ const config: GatsbyConfig = {
         output: `/`,
       },
     },
-    {
-      resolve: `gatsby-source-contentful`,
-      options: {
-        spaceId: `4yp4v3zf608p`,
-        // Learn about environment variables: https://gatsby.dev/env-vars
-        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
-      },
-    },
     `gatsby-plugin-image`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `سرترالین - خوشبختی زود و مفت`,
+        name: `سرترالین | وبلاگ شخصی سارو`,
         short_name: `سرترالین`,
-        description: `دروغ می‌گویم. می‌دانم، می‌دانم که چرا آن کار را نکردم... چون گاهی... نه. نه مهم نیست. باید پیش خودم محفوظ بماند. نیازی ندارم شما‌ها هم بدانید. خودم فکر می‌کنم کافی باشم.`,
+        description: `یادداشت‌ها و نوشته‌های شخصی سارو؛ نه راهنمای پزشکی، نه توصیه مصرف دارو، و نه جایگزین کمک حرفه‌ای.`,
         start_url: `/`,
-        background_color: `#83b4ae`,
-        // This will impact how browsers show your PWA/website
-        // https://css-tricks.com/meta-theme-color-and-trickery/
-        // theme_color: `#6B46C1`,
+        background_color: `#f7faf7`,
+        theme_color: `#f7faf7`,
         display: `standalone`,
         icons: [
           {
@@ -100,40 +101,79 @@ const config: GatsbyConfig = {
         feeds: [
           {
             serialize: ({
-              query: { site, allPost },
+              query: { site, allPost, allSanityPost },
             }: {
               query: {
                 allPost: IAllPost;
+                allSanityPost?: IAllSanityPost;
                 site: { siteMetadata: ISiteMetadata };
               };
-            }) =>
-              allPost.nodes.map((post) => {
+            }) => {
+              const mdxPosts = allPost.nodes.map((post) => ({
+                date: post.date,
+                description: post.description,
+                excerpt: post.excerpt,
+                slug: post.slug,
+                title: post.title,
+              }));
+              const sanityPosts = (allSanityPost?.nodes || []).flatMap((post) => {
+                const slug = post.slug?.current;
+                if (!post.title || !slug || !post.publishedAt) return [];
+
+                return [{
+                  date: post.publishedAt,
+                  description: post.excerpt,
+                  excerpt: post.excerpt,
+                  slug: slug.startsWith(`/`) ? slug : `/${slug}`,
+                  title: post.title,
+                }];
+              });
+
+              return [...mdxPosts, ...sanityPosts]
+                .sort(
+                  (a, b) =>
+                    new Date(`${b.date}T00:00:00.000Z`).getTime() -
+                    new Date(`${a.date}T00:00:00.000Z`).getTime()
+                )
+                .map((post) => {
                 const url = site.siteMetadata.siteUrl + post.slug;
-                const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`;
-                const theDate = new Date(post.date);
+                const excerpt = post.description || post.excerpt;
+                const content = `<p>${excerpt}</p><div style="margin-top: 32px;"><strong><a href="${url}">ادامه نوشته</a></strong></div>`;
+                const theDate = new Date(`${post.date}T00:00:00.000Z`);
                 return {
                   title: post.title,
-                  date: new Intl.DateTimeFormat('fa', {
-                    dateStyle: 'long',
-                  }).format(theDate),
-                  excerpt: post.excerpt,
+                  date: theDate,
+                  excerpt,
                   url,
                   guid: url,
                   custom_elements: [{ 'content:encoded': content }],
                 };
-              }),
+              });
+            },
             query: `{
   allPost(sort: {date: DESC}) {
     nodes {
       title
-      date(formatString: "MMMM D, YYYY")
+      date(formatString: "YYYY-MM-DD")
       excerpt
+      description
       slug
+    }
+  }
+  allSanityPost(sort: {publishedAt: DESC}, filter: {isHidden: {ne: true}}) {
+    nodes {
+      title
+      publishedAt(formatString: "YYYY-MM-DD")
+      excerpt
+      isHidden
+      slug {
+        current
+      }
     }
   }
 }`,
             output: `rss.xml`,
-            title: `Minimal Blog - @lekoarts/gatsby-theme-minimal-blog`,
+            title: `سرترالین | وبلاگ شخصی سارو`,
           },
         ],
       },
@@ -175,6 +215,19 @@ interface IPost {
 
 interface IAllPost {
   nodes: Array<IPost>;
+}
+
+interface ISanityPost {
+  title?: string;
+  publishedAt?: string;
+  excerpt?: string;
+  slug?: {
+    current?: string;
+  };
+}
+
+interface IAllSanityPost {
+  nodes: Array<ISanityPost>;
 }
 
 interface ISiteMetadata {

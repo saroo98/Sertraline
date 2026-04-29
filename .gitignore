@@ -63,7 +63,9 @@ typings/
 .cache
 **/.cache
 public
+sanity/import/*.ndjson
 
 .idea
 .vscode
 .DS_Store
+.tools

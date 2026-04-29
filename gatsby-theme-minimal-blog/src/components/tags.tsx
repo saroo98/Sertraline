@@ -7,6 +7,7 @@ import Layout from "./layout"
 import useMinimalBlogConfig from "../hooks/use-minimal-blog-config"
 import Seo from "./seo"
 import replaceSlashes from "../utils/replaceSlashes"
+import { toFarsiNumber } from "../utils/format"
 
 export type MBTagsProps = {
   list: {
@@ -14,15 +15,6 @@ export type MBTagsProps = {
     totalCount: number
   }[]
 }
-
-function toFarsiNumber(n) {
-  const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-
-  return n
-    .toString()
-    .replace(/\d/g, x => farsiDigits[x]);
-}
-
 
 const Tags = ({ list }: MBTagsProps) => {
   const { tagsPath, basePath } = useMinimalBlogConfig()
@@ -52,4 +44,4 @@ const Tags = ({ list }: MBTagsProps) => {
 
 export default Tags
 
-export const Head: HeadFC = () => <Seo title="Tags" />
+export const Head: HeadFC = () => <Seo title="برچسب‌ها" pathname="/tags" />

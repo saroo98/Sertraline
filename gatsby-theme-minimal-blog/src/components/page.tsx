@@ -14,13 +14,17 @@ export type MBPageProps = {
 
 const Page: React.FC<React.PropsWithChildren<PageProps<MBPageProps>>> = ({ data: { page }, children }) => (
   <Layout>
-    <Heading as="h1" variant="styles.h1">
-      {page.title}
-    </Heading>
-    <section sx={{ my: 5, variant: `layout.content` }}>{children}</section>
+    <div sx={{ mb: [5], variant: `cardWithP` }}>
+      <Heading as="h1" variant="styles.h1">
+        {page.title}
+      </Heading>
+      <section sx={{ my: 5, variant: `layout.content` }}>{children}</section>
+    </div>
   </Layout>
 )
 
 export default Page
 
-export const Head: HeadFC<MBPageProps> = ({ data: { page } }) => <Seo title={page.title} description={page.excerpt} />
+export const Head: HeadFC<MBPageProps> = ({ data: { page }, location }) => (
+  <Seo title={page.title} description={page.excerpt} pathname={location.pathname} />
+)

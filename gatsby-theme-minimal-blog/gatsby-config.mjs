@@ -5,14 +5,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const config = (options) => ({
   siteMetadata: {
-    siteTitle: `Minimal Blog`,
-    siteTitleAlt: `Minimal Blog - @lekoarts/gatsby-theme-minimal-blog`,
-    siteHeadline: `Minimal Blog - Gatsby Theme from @lekoarts`,
-    siteUrl: `https://minimal-blog.lekoarts.de`,
-    siteDescription: `Typography driven, feature-rich blogging theme with minimal aesthetics. Includes tags/categories support and extensive features for code blocks such as live preview, line numbers, and line highlighting.`,
+    siteTitle: `سرترالین`,
+    siteTitleAlt: `سرترالین | وبلاگ شخصی سارو`,
+    siteHeadline: `سرترالین | وبلاگ شخصی سارو`,
+    siteUrl: `https://sertraline.ir`,
+    siteDescription: `یادداشت‌ها و نوشته‌های شخصی سارو؛ نه راهنمای پزشکی، نه توصیه مصرف دارو، و نه جایگزین کمک حرفه‌ای.`,
     siteImage: `/banner.jpg`,
-    siteLanguage: `en`,
-    author: `@lekoarts_de`,
+    siteLanguage: `fa-IR`,
+    author: `Saro`,
   },
   plugins: [
     {
@@ -23,7 +23,7 @@ const config = (options) => ({
       resolve: 'gatsby-plugin-web-font-loader',
       options: {
         google: {
-          families: ['Vazirmatn', 'Lateef', 'Mirza']
+          families: ['Vazirmatn']
         }
       }
     },

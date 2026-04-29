@@ -52,4 +52,6 @@ const Tag = ({ posts, pageContext }: MBTagProps) => {
 
 export default Tag
 
-export const Head: HeadFC<unknown, { name: string }> = ({ pageContext }) => <Seo title={`Tag: ${pageContext.name}`} />
+export const Head: HeadFC<unknown, { name: string }> = ({ pageContext, location }) => (
+  <Seo title={`برچسب: ${pageContext.name}`} pathname={location.pathname} />
+)
