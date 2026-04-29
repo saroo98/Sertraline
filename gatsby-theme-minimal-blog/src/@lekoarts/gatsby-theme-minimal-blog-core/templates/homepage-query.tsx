@@ -7,7 +7,7 @@ export { Head }
 
 export const query = graphql`
   query ($formatString: String!) {
-    allPost(sort: { date: DESC }, limit: 3) {
+    allPost(sort: { date: DESC }) {
       nodes {
         slug
         title
@@ -21,7 +21,7 @@ export const query = graphql`
         }
       }
     }
-    allSanityPost(sort: { publishedAt: DESC }, limit: 3, filter: { isHidden: { ne: true } }) {
+    allSanityPost(sort: { publishedAt: DESC }, filter: { isHidden: { ne: true } }) {
       nodes {
         title
         publishedAt(formatString: $formatString)

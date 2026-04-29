@@ -2,7 +2,6 @@
 import { jsx } from "theme-ui"
 import { HeadFC, Link } from "gatsby"
 import Layout from "./layout"
-import Title from "./title"
 import Listing from "./listing"
 import List from "./list"
 import useMinimalBlogConfig from "../hooks/use-minimal-blog-config"
@@ -26,11 +25,16 @@ export type MBHomepageProps = {
       slug: string
     }[]
   }[]
+  pagination?: {
+    currentPage: number
+    numPages: number
+  }
 }
 
-const Homepage = ({ posts }: MBHomepageProps) => {
+const Homepage = ({ posts, pagination }: MBHomepageProps) => {
   const { basePath, blogPath } = useMinimalBlogConfig()
   const { siteTitle } = useSiteMetadata()
+  const pagePath = (page: number) => (page <= 1 ? `/` : replaceSlashes(`/page/${page}`))
 
   return (
     <Layout>
@@ -42,10 +46,24 @@ const Homepage = ({ posts }: MBHomepageProps) => {
       </section>
       <div sx={{ display: 'flex', flexDirection: ['column', 'column', 'row'] }}>
         <div sx={{ mb: [5, 0, 0], ml: [null, null, 5], width: '100%', variant: `cardWithP` }}>
-          <Title text="آخرین نوشته‌ها">
-            <Link to={replaceSlashes(`/${basePath}/${blogPath}`)}>تمامی نوشته‌ها</Link>
-          </Title>
           <Listing posts={posts} showTags={false} />
+          {pagination && pagination.numPages > 1 && (
+            <nav aria-label="صفحه‌های نوشته‌ها" sx={{ display: `flex`, gap: 3, justifyContent: `center`, mt: 4 }}>
+              {pagination.currentPage > 1 && (
+                <Link sx={(t) => ({ ...t.styles?.a, variant: `links.secondary` })} to={pagePath(pagination.currentPage - 1)}>
+                  نوشته‌های تازه‌تر
+                </Link>
+              )}
+              <span sx={{ color: `secondary` }}>
+                صفحه {pagination.currentPage} از {pagination.numPages}
+              </span>
+              {pagination.currentPage < pagination.numPages && (
+                <Link sx={(t) => ({ ...t.styles?.a, variant: `links.secondary` })} to={pagePath(pagination.currentPage + 1)}>
+                  نوشته‌های قدیمی‌تر
+                </Link>
+              )}
+            </nav>
+          )}
         </div>
         <div sx={{ width: '100%', variant: `cardWithP` }}>
           <List>

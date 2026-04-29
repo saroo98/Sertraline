@@ -83,6 +83,23 @@ export const createSchemaCustomization: GatsbyNode['createSchemaCustomization'] 
 export const createPages: GatsbyNode['createPages'] = async ({ actions, graphql, reporter }) => {
   if (!hasSanityConfig) {
     reporter.info('Sanity project is not configured; Gatsby is using the existing MDX content only.');
+    const mdxResult = await graphql<{ allPost: { nodes: { slug: string }[] } }>(`
+      { allPost { nodes { slug } } }
+    `);
+    if (mdxResult.errors || !mdxResult.data) return;
+    const homepageTemplate = path.resolve(
+      './gatsby-theme-minimal-blog/src/@lekoarts/gatsby-theme-minimal-blog-core/templates/homepage-query.tsx'
+    );
+    const numBlogPages = Math.ceil(mdxResult.data.allPost.nodes.length / POSTS_PER_PAGE);
+    for (let currentPage = 2; currentPage <= numBlogPages; currentPage += 1) {
+      actions.createPage({
+        path: `/page/${currentPage}`,
+        component: homepageTemplate,
+        context: { currentPage, postsPerPage: POSTS_PER_PAGE, formatString: 'YYYY-MM-DD' },
+      });
+      actions.createRedirect({ fromPath: `/blog/page/${currentPage}`, toPath: `/page/${currentPage}`, isPermanent: true });
+      actions.createRedirect({ fromPath: `/blog/page/${currentPage}/`, toPath: `/page/${currentPage}`, isPermanent: true });
+    }
     return;
   }
 
@@ -148,6 +165,9 @@ export const createPages: GatsbyNode['createPages'] = async ({ actions, graphql,
 
   const sanityPostTemplate = path.resolve('./gatsby-theme-minimal-blog/src/templates/sanity-post-query.tsx');
   const sanityPageTemplate = path.resolve('./gatsby-theme-minimal-blog/src/templates/sanity-page-query.tsx');
+  const homepageTemplate = path.resolve(
+    './gatsby-theme-minimal-blog/src/@lekoarts/gatsby-theme-minimal-blog-core/templates/homepage-query.tsx'
+  );
   const blogTemplate = path.resolve(
     './gatsby-theme-minimal-blog/src/@lekoarts/gatsby-theme-minimal-blog-core/templates/blog-query.tsx'
   );
@@ -159,6 +179,17 @@ export const createPages: GatsbyNode['createPages'] = async ({ actions, graphql,
   const existingTagSlugs = new Set(
     result.data.allPost.nodes.flatMap((post) => post.tags?.map((tag) => tag.slug) || [])
   );
+
+  actions.createRedirect({
+    fromPath: '/blog',
+    toPath: '/',
+    isPermanent: true,
+  });
+  actions.createRedirect({
+    fromPath: '/blog/',
+    toPath: '/',
+    isPermanent: true,
+  });
 
   for (const post of result.data.allSanityPost.nodes) {
     const slug = normalizePath(post.slug?.current);
@@ -230,13 +261,29 @@ export const createPages: GatsbyNode['createPages'] = async ({ actions, graphql,
   const numBlogPages = Math.ceil(visibleBlogSlugs.size / POSTS_PER_PAGE);
   for (let currentPage = 2; currentPage <= numBlogPages; currentPage += 1) {
     actions.createPage({
-      path: `/blog/page/${currentPage}`,
-      component: blogTemplate,
+      path: `/page/${currentPage}`,
+      component: homepageTemplate,
       context: {
         currentPage,
         postsPerPage: POSTS_PER_PAGE,
         formatString: 'YYYY-MM-DD',
       },
     });
+    actions.createRedirect({
+      fromPath: `/blog/page/${currentPage}`,
+      toPath: `/page/${currentPage}`,
+      isPermanent: true,
+    });
+    actions.createRedirect({
+      fromPath: `/blog/page/${currentPage}/`,
+      toPath: `/page/${currentPage}`,
+      isPermanent: true,
+    });
+  }
+};
+
+export const onCreatePage: GatsbyNode['onCreatePage'] = ({ page, actions }) => {
+  if (page.path === '/blog' || page.path === '/blog/' || page.path.startsWith('/blog/page/')) {
+    actions.deletePage(page);
   }
 };
